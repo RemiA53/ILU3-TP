@@ -1,48 +1,21 @@
 package jeu;
 
+
+import java.util.ConcurrentModificationException;
+import java.util.NoSuchElementException;
 import java.util.Iterator;
 
-import carte.*;
 
-public class Sabot<Carte> implements Iterable<T> {
-	private int nbCartes;
+import carte.Carte;
+
+public class Sabot implements Iterable<Carte> {
 	private Carte[] cartes;
-	
-	@Override
-	public Iterator<T> iterator() {
-		return new Iterateur();
-	}
-	
-	// Classe interne itérateur
-	private class Iterateur implements Iterator<T> {
-		private int indiceIterateur = 0;
-		private boolean nextEffectue = false;
-		
-		public boolean hasNext() {
-			return 110==indiceIterateur;
-		}
-		
-		public Carte next() {
-			if(hasNext()) {
-				Carte carte = cartes[indiceIterateur];
-				indiceIterateur++;
-				nextEffectue = true;
-				return carte;
-			}
-		}
-	}
+	private int nbCartes;
+	private int nombreOperation = 0;
 	
 	public Sabot(Carte[] cartes) {
 		this.cartes = cartes;
-		this.nbCartes = 110;
-	}
-
-	public int getNbCartes() {
-		return nbCartes;
-	}
-
-	public Carte[] getCartes() {
-		return cartes;
+		this.nbCartes = cartes.length;
 	}
 	
 	public boolean estVide() {
@@ -50,12 +23,62 @@ public class Sabot<Carte> implements Iterable<T> {
 	}
 	
 	public void ajouterCarte(Carte carte) {
-		if (nbCartes != 110) {
-			cartes[nbCartes] = carte;
-			nbCartes++;
-		} else {
-			throw new IllegalStateException();
+		if(nbCartes >= cartes.length) {
+			throw new IllegalStateException("Le sabot est plein");
+		}
+		cartes[nbCartes] = carte;
+		nbCartes++;
+		nombreOperation++;
+	}
+	
+	@Override
+	public Iterator<Carte> iterator() {
+		return new Iterateur();
+	}
+	// Classe interne itérateur
+	private class Iterateur implements Iterator<Carte> {
+		private int indiceIterateur = 0;
+		private boolean nextEffectue = false;
+		private int nombreOperationReference = nombreOperation;
+		
+		@Override
+		public boolean hasNext() {
+			return indiceIterateur < nbCartes;
 		}
 		
+		@Override
+		public Carte next() {
+			if(nombreOperation != nombreOperationReference) {
+				throw new ConcurrentModificationException();
+			}
+			
+			if(!hasNext()) {
+				throw new NoSuchElementException();
+			}
+			
+			Carte carte = cartes[indiceIterateur];
+			indiceIterateur++;
+			nextEffectue = true;
+			return carte;
+		}
+		
+		@Override
+		public void remove() {
+			if(nombreOperation!=nombreOperationReference) {
+				throw new ConcurrentModificationException();
+			}
+			
+			if (!nextEffectue || nbCartes < 1) {
+				throw new IllegalStateException();
+			}
+			
+			for (int i = indiceIterateur - 1; i < nbCartes - 1; i++) {
+                cartes[i] = cartes[i + 1];
+            }
+			
+			nextEffectue = false;
+			indiceIterateur--;
+			nbCartes--;
+		}
 	}
 }

@@ -1,10 +1,36 @@
 package jeu;
 
+import java.util.Iterator;
+
 import carte.*;
 
-public class Sabot implements Iterable<T extends Type> {
+public class Sabot<Carte> implements Iterable<T> {
 	private int nbCartes;
 	private Carte[] cartes;
+	
+	@Override
+	public Iterator<T> iterator() {
+		return new Iterateur();
+	}
+	
+	// Classe interne itérateur
+	private class Iterateur implements Iterator<T> {
+		private int indiceIterateur = 0;
+		private boolean nextEffectue = false;
+		
+		public boolean hasNext() {
+			return 110==indiceIterateur;
+		}
+		
+		public Carte next() {
+			if(hasNext()) {
+				Carte carte = cartes[indiceIterateur];
+				indiceIterateur++;
+				nextEffectue = true;
+				return carte;
+			}
+		}
+	}
 	
 	public Sabot(Carte[] cartes) {
 		this.cartes = cartes;

@@ -10,8 +10,8 @@ public class Borne extends Carte {
 	@Override
 	public String toString() {
 		StringBuilder chaine = new StringBuilder();
-		chaine.append("Borne ");
 		chaine.append(km);
+		chaine.append("KM");
 		return chaine.toString();
 	}
 }

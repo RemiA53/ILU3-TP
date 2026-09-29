@@ -81,4 +81,13 @@ public class Sabot implements Iterable<Carte> {
 			nbCartes--;
 		}
 	}
+	// Fin classe interne itérateur
+	
+	public Carte piocher() {
+		Iterator<Carte> it = iterator();
+		Carte carte = it.next();
+		it.remove();
+		
+		return carte;
+	}
 }

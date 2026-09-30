@@ -1,5 +1,6 @@
 package utils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -16,6 +17,14 @@ public class GestionCartes {
 		C elem = it.next();
 		it.remove();
 		return elem;
+	}
+	
+	public static <C> List<C> melanger(List<C> list) {
+		List<C> listMelange = new ArrayList<>();
+		for(C elem : list) {
+			listMelange.add(extraire(list));
+		}
+		return listMelange;
 	}
 	
 	

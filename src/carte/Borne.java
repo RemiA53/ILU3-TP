@@ -14,5 +14,14 @@ public class Borne extends Carte {
 		chaine.append("KM");
 		return chaine.toString();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Borne borne) {
+			return km == borne.km;
+		}
+		
+		return false;
+	}
 }
  

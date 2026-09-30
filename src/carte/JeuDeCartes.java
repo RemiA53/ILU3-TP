@@ -56,11 +56,10 @@ public class JeuDeCartes {
 		
 		Carte[] cartes = new Carte[taille];
 		int index = 0;
-		for (int i = 0; i < typesDeCartes.length; i++) {
-			Configuration carte = typesDeCartes[i];
-			int nbExemplaires = carte.getNbExemplaires();
-			for (int j = 0; j < nbExemplaires; j++) {
-				cartes[index] = carte.getCarte();
+		
+		for (Configuration config : typesDeCartes) {
+			for (int j = 0; j < config.getNbExemplaires(); j++) {
+				cartes[index] = config.getCarte();
 				index++;
 			}
 		}
@@ -80,10 +79,21 @@ public class JeuDeCartes {
 	}
 	
 	public boolean checkCount() {
-		int nbExemplaireTot = 0;
-		for (Configuration configuration : typesDeCartes) {
-			nbExemplaireTot += configuration.nbExemplaires;
+		Carte[] cartes = donnerCarte();
+		for (Configuration configuration : typesDeCartes ) {
+			int compteur = 0;
+			
+			for (Carte carte : cartes) {
+				if(carte.equals(configuration.getCarte())) {
+					compteur++;
+				}
+			}
+			
+			if(compteur!= configuration.getNbExemplaires()) {
+				return false;
+			}
 		}
-		return nbExemplaireTot == 106;
+		
+		return true;
 	}
 }

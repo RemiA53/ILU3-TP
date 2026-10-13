@@ -21,7 +21,7 @@ public class GestionCartes {
 	
 	public static <C> List<C> melanger(List<C> list) {
 		List<C> listMelange = new ArrayList<>();
-		for(C elem : list) {
+		while(!list.isEmpty()) {
 			listMelange.add(extraire(list));
 		}
 		return listMelange;
